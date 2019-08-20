@@ -80,7 +80,7 @@ export default {
         height: auto;
         position: absolute;
         margin-top: 15px;
-        background: rgba(11, 321, 333, 0.5)
+        background: rgba(255, 145, 183, 0.5)
     }
     .fuwu{
         text-align: left;
