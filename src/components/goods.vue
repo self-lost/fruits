@@ -18,7 +18,6 @@
 export default {
     data(){
         return{
-            goods:this.$store.state.shopping,
         }
     },
     // props:[
@@ -26,22 +25,6 @@ export default {
     // ],
     mounted(){
       this.$store.commit('goods')
-    },
-    watch:{
-        goods:{
-            handler(newValue,oldValue){
-                        console.log(newValue)   
-                        console.log(oldValue)   
-
-
-
-            }
-
-
-        }
-      
-      
-        
     },
     methods:{
         jia:function(num,mName,index){
