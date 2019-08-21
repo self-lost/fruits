@@ -130,15 +130,7 @@ goods(state){
       state.shopping=data;
       state.totalPrice=0;
       for(var i=0;i<state.shopping.length;i++){
-        // state.shopping.push(data[i]);
          state.totalPrice+=state.shopping[i].num*state.shopping[i].mPrice;
-  //   }else{
-  //     state.shopping=data;
-  //     state.totalPrice=0;
-  //     for(var i=0;i<state.shopping.length;i++){
-  //       // state.shopping.push(data[i]);
-  //        state.totalPrice+=state.shopping[i].num*state.shopping[i].mPrice;
-  //     }
      }
     })
 
