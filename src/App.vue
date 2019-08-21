@@ -3,7 +3,7 @@
     <router-view  />
     <div class="money" v-show="money">
             <input type="checkbox" value="全选">
-            <p>
+            <p >
                 合计：{{this.$store.state.totalPrice.toFixed(2)}}
           </p>
             <button @click="jiesuan()">结算</button>

@@ -46,32 +46,36 @@ export default new Vuex.Store({
       var mName = response.data[0].mName.replace(/^\s*|\s*$/g,"");
       var mPrice=response.data[0].mPrice;
       var img=response.data[0].img;
-      console.log(data)
+      var cId='';
       if(state.shopping.length==0){
-        Vue.axios.post('http://localhost:1234/insgoods',qs.stringify({'cId':state.user[0].cId,'mName':mName,'mPrice':mPrice,'img':img})).then((response)=>{
+        Vue.axios.post('http://localhost:1234/insgoods',qs.stringify({'cId':cId,'mName':mName,'mPrice':mPrice,'img':img})).then((response)=>{
           var row=response.data.affectedRows;
-          console.log(row)
+          if(row==1){
+            this.commit('goods')
+          }
          })
       }else{
         for(var i=0;i<state.shopping.length;i++){
           if(state.shopping[i].mName==mName){
             Vue.axios.post('http://localhost:1234/num',qs.stringify({'num':state.shopping[i].num,'mName':mName})).then((response)=>{
-              console.log(response.data)
               var row=response.data.affectedRows;
+              if(row==1){
+                this.commit('goods')
+              }
             })
           }else{
             Vue.axios.post('http://localhost:1234/querygoods_name',qs.stringify({'mName':mName})).then((response)=>{
-              console.log(response.data)
-              console.log(response.data[0]['count(1)'])
               var count=response.data[0]['count(1)'];
               if(count!=0){
                 return;
               }else{
                 if(state.one==1){
                   state.one=2;
-                Vue.axios.post('http://localhost:1234/insgoods',qs.stringify({'cId':state.user[0].cId,'mName':mName,'mPrice':mPrice,'img':img})).then((response)=>{
+                Vue.axios.post('http://localhost:1234/insgoods',qs.stringify({'cId':cId,'mName':mName,'mPrice':mPrice,'img':img})).then((response)=>{
                   var row=response.data.affectedRows;
-                  console.log(row)
+                  if(row==1){
+                    this.commit('goods')
+                  }
                  })
                 }
               }
@@ -83,17 +87,19 @@ export default new Vuex.Store({
   },
   goods_num(state,obj){
     //,qs.stringify({'cId':state.cId,"data":data})
-    console.log(obj.num)
     Vue.axios.post('http://localhost:1234/shuzi',qs.stringify({'num':obj.num,'mName':obj.mName})).then((response)=>{
-      var data=response.data;
-      console.log(data)
+      var row=response.data.affectedRows;
+      if(row==1){
+        this.commit('goods')
+      }
     })
   },
   del_goods(state,mName){
     Vue.axios.post('http://localhost:1234/delgoods',qs.stringify({'mName':mName})).then((response)=>{
-      var data=response.data;
-      console.log(data)
-
+      var row=response.data.affectedRows;
+      if(row==1){
+        this.commit('goods')
+      }
     })
   },
   merchandise(state){
@@ -121,23 +127,25 @@ export default new Vuex.Store({
 goods(state){
   Vue.axios.post('http://localhost:1234/goods').then((response)=>{
     var data=response.data;
-    if(data.length==state.shopping.length){
-      return;
-    }else{
-      
-    for(var i=0;i<data.length;i++){
-      state.shopping.push(data[i]);
-       state.totalPrice+=data[i].num*data[i].mPrice;
-    }
-  }
+      state.shopping=data;
+      state.totalPrice=0;
+      for(var i=0;i<state.shopping.length;i++){
+        // state.shopping.push(data[i]);
+         state.totalPrice+=state.shopping[i].num*state.shopping[i].mPrice;
+  //   }else{
+  //     state.shopping=data;
+  //     state.totalPrice=0;
+  //     for(var i=0;i<state.shopping.length;i++){
+  //       // state.shopping.push(data[i]);
+  //        state.totalPrice+=state.shopping[i].num*state.shopping[i].mPrice;
+  //     }
+     }
     })
 
 },
 userOrderform(state){
-  console.log('1')
-  Vue.axios.post('http://localhost:1234/userOrderform',qs.stringify({'cId':state.user[0].cId})).then((response)=>{
+  Vue.axios.post('http://localhost:1234/userOrderform',qs.stringify({'cId':cId})).then((response)=>{
         var data=response.data;
-        alert(data)
         state.userOrderforms=data;
         for(var i=0;i<data.length;i++){
           var date=new Date(data[i].oDate)
@@ -147,7 +155,6 @@ userOrderform(state){
          var time=year+'年'+month+'月'+day+'日';
          state.userOrderforms[i].oDate=time;
      }
-     console.log(state.userOrderforms)
 
   })
 

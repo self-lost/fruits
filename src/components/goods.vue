@@ -1,6 +1,6 @@
 <template>
     <div  class="goods">
-        <div class="max"  v-for="(result,index) in this.$store.state.shopping" :key="index">
+        <div class="max"   v-for="(result,index) in this.$store.state.shopping" :key="index">
             <div class="photo">
                 <img :src='result.img' >
             </div>
@@ -18,6 +18,7 @@
 export default {
     data(){
         return{
+            goods:this.$store.state.shopping,
         }
     },
     // props:[
@@ -25,6 +26,22 @@ export default {
     // ],
     mounted(){
       this.$store.commit('goods')
+    },
+    watch:{
+        goods:{
+            handler(newValue,oldValue){
+                        console.log(newValue)   
+                        console.log(oldValue)   
+
+
+
+            }
+
+
+        }
+      
+      
+        
     },
     methods:{
         jia:function(num,mName,index){
@@ -35,7 +52,6 @@ export default {
             if(this.$store.state.shopping[index].num<=1){
                 var a = confirm('确定要不要了嘛');
                 if(a){
-                    event.target.parentNode.parentNode.remove();
                     this.$store.commit('del_goods',mName);
                 }   
             }else{
